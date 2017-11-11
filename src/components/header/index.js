@@ -1,18 +1,32 @@
-import { h, Component } from 'preact';
-import { Link } from 'preact-router/match';
-import style from './style';
+import { h, Component } from 'preact'
+import { connect } from 'preact-redux'
+import style from './style.scss';
+import Logo from '../../assets/taozi.svg'
+import SiteLinks from './site-links'
+import {withRouter} from 'react-router-dom'
 
-export default class Header extends Component {
+const mapStateToProps = (state) => {
+	return {
+		loggedIn: !!state.auth.authToken,
+		user: state.auth.user
+	}
+}
+
+class Header extends Component {
+	constructor(props){
+		super(props)
+	}
 	render() {
 		return (
 			<header class={style.header}>
-				<h1>Preact App</h1>
-				<nav>
-					<Link activeClassName={style.active} href="/">Home</Link>
-					<Link activeClassName={style.active} href="/profile">Me</Link>
-					<Link activeClassName={style.active} href="/profile/john">John</Link>
-				</nav>
+				<div class={style.sitelogo}>
+					<img src={Logo} />
+				</div>
+				<h1 class={style.sitetitle}>Taozi</h1>
+				<SiteLinks loggedIn={this.props.loggedIn} />
 			</header>
 		);
 	}
 }
+
+export default withRouter(connect(mapStateToProps)(Header))
